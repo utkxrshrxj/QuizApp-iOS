@@ -4,25 +4,60 @@ struct QuizView: View {
     @ObservedObject var viewModel: QuizViewModel
     @Environment(\.dismiss) var dismiss
     
+    // Animation state for the 3D flip
+    @State private var flipDegrees: Double = 0.0
+    
+    // Gradient animation
+    @State private var gradientStart = UnitPoint.topLeading
+    @State private var gradientEnd = UnitPoint.bottomTrailing
+    
     var body: some View {
         ZStack {
-            Color(UIColor.systemGroupedBackground)
-                .ignoresSafeArea()
+            // Animated Gradient Background
+            LinearGradient(
+                colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.8), Color.indigo.opacity(0.8)],
+                startPoint: gradientStart,
+                endPoint: gradientEnd
+            )
+            .ignoresSafeArea()
+            .onAppear {
+                withAnimation(.easeInOut(duration: 5.0).repeatForever(autoreverses: true)) {
+                    gradientStart = .topTrailing
+                    gradientEnd = .bottomLeading
+                }
+            }
             
-            if viewModel.isQuizComplete {
+            if viewModel.isLoading {
+                VStack(spacing: 20) {
+                    ProgressView()
+                        .scaleEffect(1.5)
+                        .tint(.white)
+                    Text("Fetching Questions...")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                }
+            } else if viewModel.isQuizComplete {
                 ResultView(viewModel: viewModel, onRestart: {
                     dismiss()
                 })
             } else if let question = viewModel.currentQuestion {
                 VStack(spacing: 20) {
-                    // Header: Progress & Timer
+                    // Header: Progress & Timer & Streak
                     HStack {
-                        VStack(alignment: .leading, spacing: 4) {
+                        VStack(alignment: .leading, spacing: 6) {
                             Text(viewModel.progressText)
                                 .font(.subheadline)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.white.opacity(0.8))
                             
                             ProgressBar(progress: viewModel.progressFraction)
+                            
+                            if viewModel.streak >= 3 {
+                                Text("🔥 Streak: \(viewModel.streak)")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.orange)
+                                    .transition(.scale.combined(with: .opacity))
+                            }
                         }
                         
                         Spacer()
@@ -30,7 +65,7 @@ struct QuizView: View {
                         // Timer
                         ZStack {
                             Circle()
-                                .stroke(Color.gray.opacity(0.2), lineWidth: 4)
+                                .stroke(Color.white.opacity(0.2), lineWidth: 4)
                             
                             Circle()
                                 .trim(from: 0.0, to: CGFloat(viewModel.timeRemaining) / 15.0)
@@ -40,18 +75,19 @@ struct QuizView: View {
                             
                             Text("\(viewModel.timeRemaining)")
                                 .font(.headline)
-                                .foregroundColor(timerColor)
+                                .foregroundColor(.white)
                         }
-                        .frame(width: 44, height: 44)
+                        .frame(width: 50, height: 50)
                     }
                     .padding(.horizontal)
                     .padding(.top)
                     
-                    // Question Card
+                    // Question Card (3D Flippable)
                     VStack(alignment: .leading, spacing: 20) {
                         Text(question.text)
                             .font(.title2)
                             .fontWeight(.bold)
+                            .foregroundColor(.primary)
                             .multilineTextAlignment(.leading)
                             .fixedSize(horizontal: false, vertical: true)
                         
@@ -63,35 +99,46 @@ struct QuizView: View {
                                     isCorrect: question.correctAnswerIndex == index,
                                     isAnswerChecked: viewModel.isAnswerChecked
                                 ) {
-                                    withAnimation(.spring()) {
+                                    withAnimation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0)) {
                                         viewModel.selectOption(index: index)
+                                        flipDegrees += 360 // Trigger 3D flip
                                     }
                                 }
                             }
                         }
                     }
-                    .padding()
-                    .background(Color(UIColor.systemBackground))
-                    .cornerRadius(20)
-                    .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 5)
+                    .padding(24)
+                    .background(.ultraThinMaterial) // Glassmorphism
+                    .cornerRadius(24)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                    )
+                    .shadow(color: Color.black.opacity(0.15), radius: 20, x: 0, y: 10)
                     .padding(.horizontal)
+                    .rotation3DEffect(
+                        .degrees(flipDegrees),
+                        axis: (x: 0.0, y: 1.0, z: 0.0)
+                    )
                     
                     Spacer()
                     
                     // Next / Submit Button
                     if viewModel.isAnswerChecked {
                         Button(action: {
+                            HapticManager.shared.impact(style: .light)
                             withAnimation {
                                 viewModel.nextQuestion()
                             }
                         }) {
-                            Text(viewModel.currentQuestionIndex == (viewModel.currentCategory?.questions.count ?? 1) - 1 ? "Finish Quiz" : "Next Question")
+                            Text(viewModel.currentQuestionIndex == viewModel.questions.count - 1 ? "Finish Quiz" : "Next Question")
                                 .font(.headline)
-                                .foregroundColor(.white)
+                                .foregroundColor(.blue)
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color.blue)
-                                .cornerRadius(12)
+                                .background(Color.white)
+                                .cornerRadius(16)
+                                .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
                         }
                         .padding(.horizontal)
                         .padding(.bottom, 30)
@@ -107,8 +154,8 @@ struct QuizView: View {
                     dismiss()
                 }) {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.gray)
-                        .font(.title3)
+                        .foregroundColor(.white)
+                        .font(.title2)
                 }
             }
         }
@@ -116,7 +163,7 @@ struct QuizView: View {
     
     private var timerColor: Color {
         if viewModel.timeRemaining > 5 {
-            return .blue
+            return .green
         } else {
             return .red
         }

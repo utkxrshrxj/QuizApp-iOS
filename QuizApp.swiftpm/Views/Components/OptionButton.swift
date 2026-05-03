@@ -21,19 +21,31 @@ struct OptionButton: View {
                     if isCorrect {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.green)
+                            .font(.title3)
+                            .transition(.scale)
                     } else if isSelected {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.red)
+                            .font(.title3)
+                            .transition(.scale)
                     }
                 }
             }
             .padding()
-            .background(backgroundColor)
-            .cornerRadius(12)
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(borderColor, lineWidth: 2)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(backgroundColor)
             )
+            .background(
+                // Glassmorphism effect
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.ultraThinMaterial)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(borderColor, lineWidth: isAnswerChecked && (isCorrect || isSelected) ? 2 : 1)
+            )
+            .shadow(color: shadowColor, radius: isSelected ? 8 : 4, x: 0, y: isSelected ? 4 : 2)
         }
         .disabled(isAnswerChecked)
     }
@@ -43,14 +55,14 @@ struct OptionButton: View {
     private var backgroundColor: Color {
         if isAnswerChecked {
             if isCorrect {
-                return Color.green.opacity(0.1)
+                return Color.green.opacity(0.3)
             } else if isSelected {
-                return Color.red.opacity(0.1)
+                return Color.red.opacity(0.3)
             } else {
-                return Color.gray.opacity(0.05)
+                return Color.gray.opacity(0.1)
             }
         } else {
-            return isSelected ? Color.blue.opacity(0.1) : Color(UIColor.systemBackground)
+            return isSelected ? Color.blue.opacity(0.3) : Color.white.opacity(0.2)
         }
     }
     
@@ -61,10 +73,10 @@ struct OptionButton: View {
             } else if isSelected {
                 return .red
             } else {
-                return .gray.opacity(0.3)
+                return .white.opacity(0.3)
             }
         } else {
-            return isSelected ? .blue : .gray.opacity(0.3)
+            return isSelected ? .blue : .white.opacity(0.5)
         }
     }
     
@@ -73,5 +85,15 @@ struct OptionButton: View {
             return .gray
         }
         return .primary
+    }
+    
+    private var shadowColor: Color {
+        if isAnswerChecked {
+            if isCorrect { return Color.green.opacity(0.4) }
+            if isSelected { return Color.red.opacity(0.4) }
+        } else if isSelected {
+            return Color.blue.opacity(0.4)
+        }
+        return Color.black.opacity(0.1)
     }
 }

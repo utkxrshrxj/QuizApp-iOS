@@ -1,12 +1,17 @@
 import SwiftUI
 import Combine
 
+@MainActor
 class QuizViewModel: ObservableObject {
     // MARK: - Published Properties
     
     @Published var currentCategory: QuizCategory?
+    @Published var questions: [Question] = []
+    @Published var isLoading: Bool = false
+    
     @Published var currentQuestionIndex: Int = 0
     @Published var score: Int = 0
+    @Published var streak: Int = 0
     
     @Published var selectedOptionIndex: Int? = nil
     @Published var isAnswerChecked: Bool = false
@@ -20,18 +25,18 @@ class QuizViewModel: ObservableObject {
     private let timeLimit = 15
     
     var currentQuestion: Question? {
-        guard let category = currentCategory, currentQuestionIndex < category.questions.count else { return nil }
-        return category.questions[currentQuestionIndex]
+        guard currentQuestionIndex < questions.count else { return nil }
+        return questions[currentQuestionIndex]
     }
     
     var progressText: String {
-        guard let category = currentCategory else { return "" }
-        return "Question \(currentQuestionIndex + 1) of \(category.questions.count)"
+        guard !questions.isEmpty else { return "" }
+        return "Question \(currentQuestionIndex + 1) of \(questions.count)"
     }
     
     var progressFraction: Double {
-        guard let category = currentCategory, !category.questions.isEmpty else { return 0.0 }
-        return Double(currentQuestionIndex + 1) / Double(category.questions.count)
+        guard !questions.isEmpty else { return 0.0 }
+        return Double(currentQuestionIndex + 1) / Double(questions.count)
     }
     
     // MARK: - Intents
@@ -40,20 +45,33 @@ class QuizViewModel: ObservableObject {
         self.currentCategory = category
         self.currentQuestionIndex = 0
         self.score = 0
+        self.streak = 0
         self.isQuizComplete = false
-        resetQuestionState()
+        self.questions = []
+        
+        Task {
+            isLoading = true
+            do {
+                let fetchedQuestions = try await TriviaService.shared.fetchQuestions(categoryId: category.apiId)
+                self.questions = fetchedQuestions
+                self.isLoading = false
+                self.resetQuestionState()
+            } catch {
+                print("Error fetching questions: \(error)")
+                self.isLoading = false
+            }
+        }
     }
     
     func selectOption(index: Int) {
         guard !isAnswerChecked else { return }
+        HapticManager.shared.impact(style: .medium)
         selectedOptionIndex = index
         checkAnswer()
     }
     
     func nextQuestion() {
-        guard let category = currentCategory else { return }
-        
-        if currentQuestionIndex < category.questions.count - 1 {
+        if currentQuestionIndex < questions.count - 1 {
             currentQuestionIndex += 1
             resetQuestionState()
         } else {
@@ -74,9 +92,19 @@ class QuizViewModel: ObservableObject {
         
         if let selected = selectedOptionIndex, selected == currentQuestion?.correctAnswerIndex {
             score += 1
-            // Optional: Play correct sound
+            streak += 1
+            
+            // Streak gamification bonus (e.g., +1 extra point per 3 streaks)
+            if streak >= 3 && streak % 3 == 0 {
+                score += 1
+            }
+            
+            HapticManager.shared.notification(type: .success)
+            SoundManager.shared.playCorrectSound()
         } else {
-            // Optional: Play incorrect sound
+            streak = 0
+            HapticManager.shared.notification(type: .error)
+            SoundManager.shared.playIncorrectSound()
         }
     }
     
@@ -90,6 +118,9 @@ class QuizViewModel: ObservableObject {
     private func endQuiz() {
         stopTimer()
         isQuizComplete = true
+        if score >= (questions.count / 2) {
+            HapticManager.shared.notification(type: .success)
+        }
     }
     
     // MARK: - Timer Logic
@@ -104,9 +135,12 @@ class QuizViewModel: ObservableObject {
                 if self.timeRemaining > 0 {
                     self.timeRemaining -= 1
                 } else {
-                    // Time is up, mark as incorrect
+                    // Time is up
                     self.stopTimer()
                     self.isAnswerChecked = true
+                    self.streak = 0
+                    HapticManager.shared.notification(type: .error)
+                    SoundManager.shared.playIncorrectSound()
                 }
             }
     }
