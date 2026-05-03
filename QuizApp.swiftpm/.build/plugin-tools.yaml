@@ -1,0 +1,81 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "PackageStructure": ["<PackageStructure>"]
+  "Quiz App-arm64-apple-macosx-debug.exe": ["<Quiz App-arm64-apple-macosx-debug.exe>"]
+  "Quiz App-arm64-apple-macosx-debug.module": ["<Quiz App-arm64-apple-macosx-debug.module>"]
+  "main": ["<Quiz App-arm64-apple-macosx-debug.exe>","<Quiz App-arm64-apple-macosx-debug.module>"]
+  "test": ["<Quiz App-arm64-apple-macosx-debug.exe>","<Quiz App-arm64-apple-macosx-debug.module>"]
+default: "main"
+nodes:
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App":
+    is-mutated: true
+commands:
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App-entitlement.plist":
+    tool: write-auxiliary-file
+    inputs: ["<entitlement-plist>","<com.apple.security.get-task-allow>"]
+    outputs: ["/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App-entitlement.plist"]
+    description: "Write auxiliary file /Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App-entitlement.plist"
+
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App.product/Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/OptionButton.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ProgressBar.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/Question.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizAppApp.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizCategory.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizView.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizViewModel.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ResultView.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/StartView.swift.o"]
+    outputs: ["/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App.product/Objects.LinkFileList"
+
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Models/Question.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Models/QuizCategory.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/QuizAppApp.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/ViewModels/QuizViewModel.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/Components/OptionButton.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/Components/ProgressBar.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/QuizView.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/ResultView.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/StartView.swift"]
+    outputs: ["/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/sources"]
+    description: "Write auxiliary file /Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/sources"
+
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"]
+    outputs: ["/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
+
+  "<Quiz App-arm64-apple-macosx-debug.exe>":
+    tool: phony
+    inputs: ["<Quiz App-arm64-apple-macosx-debug.exe-CodeSigning>"]
+    outputs: ["<Quiz App-arm64-apple-macosx-debug.exe>"]
+
+  "<Quiz App-arm64-apple-macosx-debug.module>":
+    tool: phony
+    inputs: ["/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/Question.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizCategory.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizAppApp.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizViewModel.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/OptionButton.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ProgressBar.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizView.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ResultView.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/StartView.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Modules/Quiz_App.swiftmodule"]
+    outputs: ["<Quiz App-arm64-apple-macosx-debug.module>"]
+
+  "C.Quiz App-arm64-apple-macosx-debug.exe":
+    tool: shell
+    inputs: ["/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/OptionButton.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ProgressBar.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/Question.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizAppApp.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizCategory.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizView.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizViewModel.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ResultView.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/StartView.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App.product/Objects.LinkFileList"]
+    outputs: ["/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App"]
+    description: "Linking ./.build/arm64-apple-macosx/debug/Quiz App"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-L","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug","-o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App","-module-name","Quiz_App","-Xlinker","-no_warn_duplicate_libraries","-emit-executable","-Xlinker","-alias","-Xlinker","_Quiz_App_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App.product/Objects.LinkFileList","-Xlinker","-rpath","-Xlinker","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.5/macosx","-Xlinker","-rpath","-Xlinker","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx","-target","arm64-apple-macosx10.13","-Xlinker","-add_ast_path","-Xlinker","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Modules/Quiz_App.swiftmodule","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g"]
+
+  "C.Quiz App-arm64-apple-macosx-debug.exe-entitlements":
+    tool: shell
+    inputs: ["/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App-entitlement.plist"]
+    outputs: ["<Quiz App-arm64-apple-macosx-debug.exe-CodeSigning>"]
+    description: "Applying debug entitlements to ./.build/arm64-apple-macosx/debug/Quiz App"
+    args: ["codesign","--force","--sign","-","--entitlements","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App-entitlement.plist","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz App"]
+
+  "C.Quiz App-arm64-apple-macosx-debug.module":
+    tool: shell
+    inputs: ["/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Models/Question.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Models/QuizCategory.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/QuizAppApp.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/ViewModels/QuizViewModel.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/Components/OptionButton.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/Components/ProgressBar.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/QuizView.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/ResultView.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/StartView.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/sources"]
+    outputs: ["/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/Question.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizCategory.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizAppApp.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizViewModel.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/OptionButton.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ProgressBar.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizView.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ResultView.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/StartView.swift.o","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Modules/Quiz_App.swiftmodule"]
+    description: "Compiling Swift Module 'Quiz_App' (9 sources)"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","Quiz_App","-emit-dependencies","-emit-module","-emit-module-path","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Modules/Quiz_App.swiftmodule","-output-file-map","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/output-file-map.json","-incremental","-c","@/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/sources","-I","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx10.13","-incremental","-enable-batch-mode","-serialize-diagnostics","-index-store-path","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-j10","-DSWIFT_PACKAGE","-DDEBUG","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","Quiz_App_main","-swift-version","5","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g","-Xcc","-isysroot","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.sdk","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-fPIC","-Xcc","-g"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Package.swift","/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+

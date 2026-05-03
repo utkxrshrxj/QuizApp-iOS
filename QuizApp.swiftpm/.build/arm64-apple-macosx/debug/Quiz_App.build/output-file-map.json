@@ -1,0 +1,68 @@
+{
+  "": {
+    "swift-dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/primary.swiftdeps"
+  },
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Models/Question.swift": {
+    "dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/Question.d",
+    "object": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/Question.swift.o",
+    "swiftmodule": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/Question~partial.swiftmodule",
+    "swift-dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/Question.swiftdeps",
+    "diagnostics": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/Question.dia"
+  },
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Models/QuizCategory.swift": {
+    "dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizCategory.d",
+    "object": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizCategory.swift.o",
+    "swiftmodule": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizCategory~partial.swiftmodule",
+    "swift-dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizCategory.swiftdeps",
+    "diagnostics": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizCategory.dia"
+  },
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/QuizAppApp.swift": {
+    "dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizAppApp.d",
+    "object": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizAppApp.swift.o",
+    "swiftmodule": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizAppApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizAppApp.swiftdeps",
+    "diagnostics": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizAppApp.dia"
+  },
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/ViewModels/QuizViewModel.swift": {
+    "dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizViewModel.d",
+    "object": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizViewModel.swift.o",
+    "swiftmodule": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizViewModel~partial.swiftmodule",
+    "swift-dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizViewModel.swiftdeps",
+    "diagnostics": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizViewModel.dia"
+  },
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/Components/OptionButton.swift": {
+    "dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/OptionButton.d",
+    "object": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/OptionButton.swift.o",
+    "swiftmodule": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/OptionButton~partial.swiftmodule",
+    "swift-dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/OptionButton.swiftdeps",
+    "diagnostics": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/OptionButton.dia"
+  },
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/Components/ProgressBar.swift": {
+    "dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ProgressBar.d",
+    "object": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ProgressBar.swift.o",
+    "swiftmodule": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ProgressBar~partial.swiftmodule",
+    "swift-dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ProgressBar.swiftdeps",
+    "diagnostics": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ProgressBar.dia"
+  },
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/QuizView.swift": {
+    "dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizView.d",
+    "object": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizView.swift.o",
+    "swiftmodule": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizView~partial.swiftmodule",
+    "swift-dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizView.swiftdeps",
+    "diagnostics": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/QuizView.dia"
+  },
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/ResultView.swift": {
+    "dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ResultView.d",
+    "object": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ResultView.swift.o",
+    "swiftmodule": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ResultView~partial.swiftmodule",
+    "swift-dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ResultView.swiftdeps",
+    "diagnostics": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/ResultView.dia"
+  },
+  "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/Views/StartView.swift": {
+    "dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/StartView.d",
+    "object": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/StartView.swift.o",
+    "swiftmodule": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/StartView~partial.swiftmodule",
+    "swift-dependencies": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/StartView.swiftdeps",
+    "diagnostics": "/Users/utkarshraj/Desktop/iOS App/Quiz App/QuizApp.swiftpm/.build/arm64-apple-macosx/debug/Quiz_App.build/StartView.dia"
+  }
+}
