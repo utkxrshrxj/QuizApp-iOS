@@ -47,7 +47,7 @@ struct OptionButton: View {
             )
             .shadow(color: shadowColor, radius: isSelected ? 8 : 4, x: 0, y: isSelected ? 4 : 2)
         }
-        .disabled(isAnswerChecked)
+        .allowsHitTesting(!isAnswerChecked)
     }
     
     // MARK: - Dynamic Colors
@@ -59,10 +59,10 @@ struct OptionButton: View {
             } else if isSelected {
                 return Color.red.opacity(0.4)
             } else {
-                return Color.primary.opacity(0.05)
+                return Color.clear
             }
         } else {
-            return isSelected ? Color.blue.opacity(0.3) : Color.primary.opacity(0.05)
+            return isSelected ? Color.blue.opacity(0.3) : Color.clear
         }
     }
     
@@ -82,7 +82,7 @@ struct OptionButton: View {
     
     private var textColor: Color {
         if isAnswerChecked && !isCorrect && !isSelected {
-            return Color.primary.opacity(0.4)
+            return Color.primary.opacity(0.7)
         }
         return .primary
     }
