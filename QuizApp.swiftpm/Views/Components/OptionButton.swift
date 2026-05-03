@@ -89,8 +89,8 @@ struct OptionButton: View {
     
     private var shadowColor: Color {
         if isAnswerChecked {
-            if isCorrect { return Color.green.opacity(0.4) }
-            if isSelected { return Color.red.opacity(0.4) }
+            // Remove colored shadows when checked so they don't blur into adjacent glass buttons
+            return Color.clear
         } else if isSelected {
             return Color.blue.opacity(0.4)
         }
