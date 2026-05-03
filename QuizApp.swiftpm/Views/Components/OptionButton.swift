@@ -55,14 +55,14 @@ struct OptionButton: View {
     private var backgroundColor: Color {
         if isAnswerChecked {
             if isCorrect {
-                return Color.green.opacity(0.3)
+                return Color.green.opacity(0.4)
             } else if isSelected {
-                return Color.red.opacity(0.3)
+                return Color.red.opacity(0.4)
             } else {
-                return Color.gray.opacity(0.1)
+                return Color.primary.opacity(0.05)
             }
         } else {
-            return isSelected ? Color.blue.opacity(0.3) : Color.white.opacity(0.2)
+            return isSelected ? Color.blue.opacity(0.3) : Color.primary.opacity(0.05)
         }
     }
     
@@ -73,16 +73,16 @@ struct OptionButton: View {
             } else if isSelected {
                 return .red
             } else {
-                return .white.opacity(0.3)
+                return Color.primary.opacity(0.1)
             }
         } else {
-            return isSelected ? .blue : .white.opacity(0.5)
+            return isSelected ? .blue : Color.primary.opacity(0.2)
         }
     }
     
     private var textColor: Color {
         if isAnswerChecked && !isCorrect && !isSelected {
-            return .gray
+            return Color.primary.opacity(0.4)
         }
         return .primary
     }
@@ -94,6 +94,6 @@ struct OptionButton: View {
         } else if isSelected {
             return Color.blue.opacity(0.4)
         }
-        return Color.black.opacity(0.1)
+        return Color.clear
     }
 }
