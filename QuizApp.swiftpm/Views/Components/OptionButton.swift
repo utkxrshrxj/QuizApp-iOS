@@ -5,6 +5,7 @@ struct OptionButton: View {
     let isSelected: Bool
     let isCorrect: Bool
     let isAnswerChecked: Bool
+    let isHidden: Bool
     let action: () -> Void
     
     var body: some View {
@@ -47,7 +48,10 @@ struct OptionButton: View {
             )
             .shadow(color: shadowColor, radius: isSelected ? 8 : 4, x: 0, y: isSelected ? 4 : 2)
         }
-        .allowsHitTesting(!isAnswerChecked)
+        .allowsHitTesting(!isAnswerChecked && !isHidden)
+        .opacity(isHidden ? 0.3 : 1.0)
+        .scaleEffect(isHidden ? 0.95 : 1.0)
+        .animation(.spring(), value: isHidden)
     }
     
     // MARK: - Dynamic Colors

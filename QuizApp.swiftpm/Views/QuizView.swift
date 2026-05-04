@@ -82,6 +82,12 @@ struct QuizView: View {
                     .padding(.horizontal)
                     .padding(.top)
                     
+                    // Lifelines
+                    if !viewModel.isAnswerChecked {
+                        LifelineView(viewModel: viewModel)
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
+                    }
+                    
                     // Question Card (3D Flippable)
                     VStack(alignment: .leading, spacing: 20) {
                         Text(question.text)
@@ -97,7 +103,8 @@ struct QuizView: View {
                                     text: question.options[index],
                                     isSelected: viewModel.selectedOptionIndex == index,
                                     isCorrect: question.correctAnswerIndex == index,
-                                    isAnswerChecked: viewModel.isAnswerChecked
+                                    isAnswerChecked: viewModel.isAnswerChecked,
+                                    isHidden: viewModel.hiddenOptionIndices.contains(index)
                                 ) {
                                     withAnimation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0)) {
                                         viewModel.selectOption(index: index)
@@ -167,5 +174,73 @@ struct QuizView: View {
         } else {
             return .red
         }
+    }
+}
+
+struct LifelineView: View {
+    @ObservedObject var viewModel: QuizViewModel
+    
+    var body: some View {
+        HStack(spacing: 20) {
+            LifelineButton(
+                icon: "scissors", 
+                label: "50/50", 
+                isUsed: viewModel.used5050
+            ) {
+                withAnimation {
+                    viewModel.apply5050()
+                }
+            }
+            
+            LifelineButton(
+                icon: "goforward.15", 
+                label: "+15s", 
+                isUsed: viewModel.usedTimeExtension
+            ) {
+                withAnimation {
+                    viewModel.extendTime()
+                }
+            }
+            
+            LifelineButton(
+                icon: "arrow.right.circle", 
+                label: "Skip", 
+                isUsed: viewModel.usedSkip
+            ) {
+                withAnimation {
+                    viewModel.skipQuestion()
+                }
+            }
+        }
+        .padding(.horizontal)
+    }
+}
+
+struct LifelineButton: View {
+    let icon: String
+    let label: String
+    let isUsed: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.title3)
+                Text(label)
+                    .font(.caption)
+                    .fontWeight(.bold)
+            }
+            .foregroundColor(isUsed ? .white.opacity(0.4) : .white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(isUsed ? Color.white.opacity(0.1) : Color.white.opacity(0.2))
+            .cornerRadius(16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(isUsed ? Color.clear : Color.white.opacity(0.3), lineWidth: 1)
+            )
+        }
+        .disabled(isUsed)
     }
 }

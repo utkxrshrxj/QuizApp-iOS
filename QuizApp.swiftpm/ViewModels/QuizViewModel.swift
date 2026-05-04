@@ -16,13 +16,19 @@ class QuizViewModel: ObservableObject {
     @Published var selectedOptionIndex: Int? = nil
     @Published var isAnswerChecked: Bool = false
     
-    @Published var timeRemaining: Int = 15
+    @Published var timeRemaining: Int = 10
     @Published var isQuizComplete: Bool = false
+    
+    // Lifelines
+    @Published var used5050: Bool = false
+    @Published var usedSkip: Bool = false
+    @Published var usedTimeExtension: Bool = false
+    @Published var hiddenOptionIndices: Set<Int> = []
     
     // MARK: - Private Properties
     
     private var timerSubscription: AnyCancellable?
-    private let timeLimit = 15
+    private let timeLimit = 10
     
     var currentQuestion: Question? {
         guard currentQuestionIndex < questions.count else { return nil }
@@ -48,6 +54,10 @@ class QuizViewModel: ObservableObject {
         self.streak = 0
         self.isQuizComplete = false
         self.questions = []
+        self.used5050 = false
+        self.usedSkip = false
+        self.usedTimeExtension = false
+        self.hiddenOptionIndices = []
         
         Task {
             isLoading = true
@@ -63,8 +73,36 @@ class QuizViewModel: ObservableObject {
         }
     }
     
+    // MARK: - Lifeline Intents
+    
+    func apply5050() {
+        guard !used5050, !isAnswerChecked, let question = currentQuestion else { return }
+        
+        var incorrectIndices = Array(0..<question.options.count).filter { $0 != question.correctAnswerIndex }
+        incorrectIndices.shuffle()
+        
+        // Hide two incorrect options
+        hiddenOptionIndices = Set(incorrectIndices.prefix(2))
+        used5050 = true
+        HapticManager.shared.impact(style: .heavy)
+    }
+    
+    func skipQuestion() {
+        guard !usedSkip, !isAnswerChecked else { return }
+        usedSkip = true
+        HapticManager.shared.impact(style: .medium)
+        nextQuestion()
+    }
+    
+    func extendTime() {
+        guard !usedTimeExtension, !isAnswerChecked else { return }
+        timeRemaining += 10
+        usedTimeExtension = true
+        HapticManager.shared.impact(style: .light)
+    }
+    
     func selectOption(index: Int) {
-        guard !isAnswerChecked else { return }
+        guard !isAnswerChecked, !hiddenOptionIndices.contains(index) else { return }
         HapticManager.shared.impact(style: .medium)
         selectedOptionIndex = index
         checkAnswer()
@@ -73,6 +111,7 @@ class QuizViewModel: ObservableObject {
     func nextQuestion() {
         if currentQuestionIndex < questions.count - 1 {
             currentQuestionIndex += 1
+            hiddenOptionIndices = [] // Reset hidden options for next question
             resetQuestionState()
         } else {
             endQuiz()
@@ -91,7 +130,7 @@ class QuizViewModel: ObservableObject {
         stopTimer()
         
         if let selected = selectedOptionIndex, selected == currentQuestion?.correctAnswerIndex {
-            score += 1
+            score += 2
             streak += 1
             
             // Streak gamification bonus (e.g., +1 extra point per 3 streaks)
@@ -102,6 +141,7 @@ class QuizViewModel: ObservableObject {
             HapticManager.shared.notification(type: .success)
             SoundManager.shared.playCorrectSound()
         } else {
+            score -= 1
             streak = 0
             HapticManager.shared.notification(type: .error)
             SoundManager.shared.playIncorrectSound()
@@ -118,7 +158,7 @@ class QuizViewModel: ObservableObject {
     private func endQuiz() {
         stopTimer()
         isQuizComplete = true
-        if score >= (questions.count / 2) {
+        if score >= questions.count { // Adjusted threshold since max score is higher now
             HapticManager.shared.notification(type: .success)
         }
     }
@@ -138,6 +178,7 @@ class QuizViewModel: ObservableObject {
                     // Time is up
                     self.stopTimer()
                     self.isAnswerChecked = true
+                    self.score -= 1 // Penalty for timing out
                     self.streak = 0
                     HapticManager.shared.notification(type: .error)
                     SoundManager.shared.playIncorrectSound()
