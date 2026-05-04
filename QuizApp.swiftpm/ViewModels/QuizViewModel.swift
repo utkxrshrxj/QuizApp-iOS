@@ -19,6 +19,15 @@ class QuizViewModel: ObservableObject {
     
     @Published var timeRemaining: Int = 10
     @Published var isQuizComplete: Bool = false
+    @Published var isDailyChallenge: Bool = false
+    
+    // Review Logic
+    struct AttemptedQuestion: Identifiable {
+        let id = UUID()
+        let question: Question
+        let selectedIndex: Int? // nil if timeout
+    }
+    @Published var attemptedQuestions: [AttemptedQuestion] = []
     
     // Lifelines
     @Published var used5050: Bool = false
@@ -48,14 +57,16 @@ class QuizViewModel: ObservableObject {
     
     // MARK: - Intents
     
-    func startQuiz(category: QuizCategory) {
+    func startQuiz(category: QuizCategory, isDaily: Bool = false) {
         self.currentCategory = category
         self.currentQuestionIndex = 0
         self.score = 0
         self.streak = 0
         self.highestStreak = 0
         self.isQuizComplete = false
+        self.isDailyChallenge = isDaily
         self.questions = []
+        self.attemptedQuestions = []
         self.used5050 = false
         self.usedSkip = false
         self.usedTimeExtension = false
@@ -73,6 +84,14 @@ class QuizViewModel: ObservableObject {
                 self.isLoading = false
             }
         }
+    }
+    
+    func startDailyChallenge() {
+        // Daily challenge uses a rotating category based on the day of the year
+        let dayOfYear = Calendar.current.ordinality(of: .day, in: .year, for: Date()) ?? 1
+        let categories = QuizCategory.sampleCategories
+        let category = categories[dayOfYear % categories.count]
+        startQuiz(category: category, isDaily: true)
     }
     
     // MARK: - Lifeline Intents
@@ -131,6 +150,10 @@ class QuizViewModel: ObservableObject {
         isAnswerChecked = true
         stopTimer()
         
+        if let question = currentQuestion {
+            attemptedQuestions.append(AttemptedQuestion(question: question, selectedIndex: selectedOptionIndex))
+        }
+        
         if let selected = selectedOptionIndex, selected == currentQuestion?.correctAnswerIndex {
             score += 2
             streak += 1
@@ -185,6 +208,11 @@ class QuizViewModel: ObservableObject {
                     // Time is up
                     self.stopTimer()
                     self.isAnswerChecked = true
+                    
+                    if let question = self.currentQuestion {
+                        self.attemptedQuestions.append(AttemptedQuestion(question: question, selectedIndex: nil))
+                    }
+                    
                     // Award 0 points for timing out, but break the streak
                     self.streak = 0
                     HapticManager.shared.notification(type: .error)

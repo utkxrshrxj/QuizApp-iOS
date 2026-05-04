@@ -4,119 +4,117 @@ struct ResultView: View {
     @ObservedObject var viewModel: QuizViewModel
     var onRestart: () -> Void
     
+    @State private var showReview = false
+    
     var body: some View {
         ZStack {
-            // Background
-            LinearGradient(
-                colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.8)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+            backgroundLayer
             
-            // Confetti if score is good (e.g. > 50% of max possible score)
             if viewModel.score >= viewModel.questions.count {
                 ConfettiView()
             }
             
-            VStack(spacing: 30) {
+            VStack(spacing: 25) {
                 Spacer()
-                
-                VStack(spacing: 16) {
-                    Text(scoreReaction.emoji)
-                        .font(.system(size: 100))
-                        .shadow(radius: 10)
-                    
-                    Text(scoreReaction.title)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                    
-                    Text(scoreReaction.message)
-                        .font(.subheadline)
-                        .foregroundColor(.white.opacity(0.8))
-                }
-                .multilineTextAlignment(.center)
-                
-                VStack(spacing: 15) {
-                    Text("Your Score")
-                        .font(.title3)
-                        .foregroundColor(.white.opacity(0.8))
-                    
-                    HStack(alignment: .lastTextBaseline, spacing: 4) {
-                        Text("\(viewModel.score)")
-                            .font(.system(size: 70, weight: .black))
-                            .foregroundColor(.white)
-                        
-                        Text("/ \(viewModel.questions.count * 2)")
-                            .font(.title)
-                            .foregroundColor(.white.opacity(0.7))
-                    }
-                    
-                    if viewModel.highestStreak > 0 {
-                        Text("🔥 Best Streak: \(viewModel.highestStreak)")
-                            .font(.headline)
-                            .foregroundColor(.orange)
-                            .padding(.top, 10)
-                    }
-                }
-                .padding(40)
-                .background(.ultraThinMaterial)
-                .cornerRadius(30)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 30)
-                        .stroke(Color.white.opacity(0.5), lineWidth: 1)
-                )
-                .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 10)
-                .padding(.horizontal, 30)
-                
+                reactionSection
+                scoreCardSection
                 Spacer()
-                
-                Button(action: {
-                    HapticManager.shared.impact(style: .light)
-                    onRestart()
-                }) {
-                    HStack {
-                        Image(systemName: "arrow.counterclockwise")
-                        Text("Choose Another Category")
-                    }
-                    .font(.headline)
-                    .foregroundColor(.blue)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(16)
-                    .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
-                }
-                .padding(.horizontal, 30)
-                .padding(.bottom, 40)
+                restartButtonSection
+            }
+        }
+        .sheet(isPresented: $showReview) {
+            ReviewMistakesView(viewModel: viewModel)
+        }
+    }
+    
+    // MARK: - Components
+    
+    private var backgroundLayer: some View {
+        LinearGradient(
+            colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.8)],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .ignoresSafeArea()
+    }
+    
+    private var reactionSection: some View {
+        let reaction = currentReaction
+        return VStack(spacing: 12) {
+            Text(reaction.emoji).font(.system(size: 90)).shadow(radius: 10)
+            Text(reaction.title).font(.largeTitle).fontWeight(.black).foregroundColor(.white)
+            Text(reaction.message).font(.subheadline).foregroundColor(.white.opacity(0.8)).multilineTextAlignment(.center)
+        }
+    }
+    
+    private var scoreCardSection: some View {
+        VStack(spacing: 20) {
+            scoreDisplay
+            
+            if viewModel.highestStreak > 0 {
+                Text("🔥 Best Streak: \(viewModel.highestStreak)").font(.headline).foregroundColor(.orange)
+            }
+            
+            actionButtonsRow
+        }
+        .padding(30)
+        .background(.ultraThinMaterial).cornerRadius(30)
+        .overlay(RoundedRectangle(cornerRadius: 30).stroke(Color.white.opacity(0.4), lineWidth: 1))
+        .padding(.horizontal, 30)
+    }
+    
+    private var scoreDisplay: some View {
+        VStack(spacing: 4) {
+            Text("YOUR SCORE").font(.caption).fontWeight(.bold).foregroundColor(.white.opacity(0.6))
+            HStack(alignment: .lastTextBaseline, spacing: 4) {
+                Text("\(viewModel.score)").font(.system(size: 80, weight: .black)).foregroundColor(.white)
+                Text("/ \(viewModel.questions.count * 2)").font(.title).foregroundColor(.white.opacity(0.6))
             }
         }
     }
     
-    // MARK: - Reaction Logic
-    
-    private var scoreReaction: ScoreReaction {
-        let maxScore = viewModel.questions.count * 2
-        
-        if viewModel.score >= maxScore {
-            return ScoreReaction(emoji: "🏆", title: "Perfect!", message: "You are a true Quiz Master!")
-        } else if viewModel.score > 10 {
-            return ScoreReaction(emoji: "😊", title: "Great Job!", message: "That's an impressive score!")
-        } else if viewModel.score > 5 {
-            return ScoreReaction(emoji: "😐", title: "Okayish", message: "Not bad, but you can do better!")
-        } else if viewModel.score == 0 {
-            return ScoreReaction(emoji: "😢", title: "So Sad", message: "Better luck next time...")
-        } else if viewModel.score < 0 {
-            return ScoreReaction(emoji: "💀", title: "Disaster!", message: "Ouch! Negative points?!")
-        } else {
-            return ScoreReaction(emoji: "📝", title: "Keep Practicing", message: "You're getting there!")
+    private var actionButtonsRow: some View {
+        HStack(spacing: 20) {
+            // Review Button
+            Button(action: { showReview = true }) {
+                buttonLabel(icon: "list.bullet.rectangle.portrait", label: "Review")
+            }
+            
+            // Share Button
+            ShareLink(item: "🚀 I scored \(viewModel.score) in Quiz Master! Best streak: \(viewModel.highestStreak) 🔥") {
+                buttonLabel(icon: "square.and.arrow.up", label: "Share")
+            }
         }
     }
-}
-
-struct ScoreReaction {
-    let emoji: String
-    let title: String
-    let message: String
+    
+    private func buttonLabel(icon: String, label: String) -> some View {
+        VStack(spacing: 6) {
+            Image(systemName: icon).font(.title2)
+            Text(label).font(.caption2).fontWeight(.bold)
+        }
+        .foregroundColor(.white).frame(maxWidth: .infinity).padding(.vertical, 12)
+        .background(Color.white.opacity(0.15)).cornerRadius(16)
+    }
+    
+    private var restartButtonSection: some View {
+        Button(action: {
+            HapticManager.shared.impact(style: .medium)
+            onRestart()
+        }) {
+            Text("PLAY AGAIN")
+                .font(.headline).fontWeight(.bold).foregroundColor(.blue).frame(maxWidth: .infinity).padding()
+                .background(Color.white).cornerRadius(16).shadow(color: Color.black.opacity(0.15), radius: 10)
+        }
+        .padding(.horizontal, 40).padding(.bottom, 40)
+    }
+    
+    // MARK: - Logic Helpers
+    
+    private var currentReaction: (emoji: String, title: String, message: String) {
+        let maxScore = viewModel.questions.count * 2
+        if viewModel.score >= maxScore { return ("🏆", "PERFECT!", "You are a true Quiz Master!") }
+        else if viewModel.score > 10 { return ("😊", "GREAT JOB!", "That's an impressive score!") }
+        else if viewModel.score > 0 { return ("😐", "GOOD TRY", "Not bad, but you can do better!") }
+        else { return ("😢", "OH NO!", "Don't give up, try again!") }
+    }
 }
