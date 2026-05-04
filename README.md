@@ -1,19 +1,19 @@
-# 🧠 Quiz Master
+#  Quiz Master
 
 **Quiz Master** is a premium, gamified SwiftUI application built for iPad and iPhone. It offers a high-fidelity trivia experience with dynamic themes, adaptive soundscapes, and advanced gameplay mechanics.
 
 ---
 
-## 🚀 Features
+##  Features
 
-### 🎮 Gameplay
+###  Gameplay
 - **Daily Challenge**: A unique, date-rotating category challenge every 24 hours.
 - **Dynamic Difficulty**: Choose between Easy, Medium, and Hard to match your skill level.
 - **True/False & Multiple Choice**: Adaptive UI that switches layouts based on the question type.
 - **Lifelines**: Use *50/50*, *Time Extension*, and *Skip* to survive tough rounds.
 - **Streak System**: Maintain a streak of 3+ to see the floating fire badge and earn bonus points.
 
-### 🎨 Personalization & UX
+###  Personalization & UX
 - **Theme Store**: Swap between premium themes like *Neon Night*, *Midnight Forest*, and *Sunset Empire*.
 - **Dynamic Soundscapes**: Ambient background music that increases in intensity when the timer hits 5 seconds.
 - **Glassmorphism UI**: A modern, translucent design with smooth 3D animations and haptic feedback.
@@ -22,7 +22,7 @@
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 - **Language**: Swift 5.8+
 - **Framework**: SwiftUI
 - **Architecture**: MVVM (Model-View-ViewModel)
@@ -32,7 +32,7 @@
 
 ---
 
-## 📥 How to Run
+##  How to Run
 
 ### On iPad or Mac (Swift Playgrounds)
 1.  Download the repository as a ZIP or clone it using `git clone`.
@@ -46,7 +46,7 @@
 
 ---
 
-## 📸 Preview
+##  Preview
 *(Add your screenshots here to make the repo look amazing!)*
 
 ---
