@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ResultView: View {
     @ObservedObject var viewModel: QuizViewModel
+    @EnvironmentObject var themeManager: ThemeManager
     var onRestart: () -> Void
     
     @State private var showReview = false
@@ -16,7 +17,7 @@ struct ResultView: View {
             
             VStack(spacing: 25) {
                 Spacer()
-                reactionSection
+                reactionHeader
                 scoreCardSection
                 Spacer()
                 restartButtonSection
@@ -27,18 +28,18 @@ struct ResultView: View {
         }
     }
     
-    // MARK: - Components
+    // MARK: - Sub-Views
     
     private var backgroundLayer: some View {
         LinearGradient(
-            colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.8)],
+            colors: themeManager.currentTheme.gradientColors,
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
         .ignoresSafeArea()
     }
     
-    private var reactionSection: some View {
+    private var reactionHeader: some View {
         let reaction = currentReaction
         return VStack(spacing: 12) {
             Text(reaction.emoji).font(.system(size: 90)).shadow(radius: 10)
@@ -59,7 +60,7 @@ struct ResultView: View {
         }
         .padding(30)
         .background(.ultraThinMaterial).cornerRadius(30)
-        .overlay(RoundedRectangle(cornerRadius: 30).stroke(Color.white.opacity(0.4), lineWidth: 1))
+        .overlay(RoundedRectangle(cornerRadius: 30).stroke(themeManager.currentTheme.accent.opacity(0.4), lineWidth: 1))
         .padding(.horizontal, 30)
     }
     
@@ -102,7 +103,7 @@ struct ResultView: View {
             onRestart()
         }) {
             Text("PLAY AGAIN")
-                .font(.headline).fontWeight(.bold).foregroundColor(.blue).frame(maxWidth: .infinity).padding()
+                .font(.headline).fontWeight(.bold).foregroundColor(themeManager.currentTheme.accent).frame(maxWidth: .infinity).padding()
                 .background(Color.white).cornerRadius(16).shadow(color: Color.black.opacity(0.15), radius: 10)
         }
         .padding(.horizontal, 40).padding(.bottom, 40)

@@ -6,6 +6,7 @@ struct OptionButton: View {
     let isCorrect: Bool
     let isAnswerChecked: Bool
     let isHidden: Bool
+    var accentColor: Color = .blue
     let action: () -> Void
     
     var body: some View {
@@ -22,82 +23,49 @@ struct OptionButton: View {
                     if isCorrect {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.green)
-                            .font(.title3)
-                            .transition(.scale)
                     } else if isSelected {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.red)
-                            .font(.title3)
-                            .transition(.scale)
                     }
                 }
             }
             .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(backgroundColor)
-            )
-            .background(
-                // Glassmorphism effect
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(.ultraThinMaterial)
-            )
+            .frame(maxWidth: .infinity)
+            .background(backgroundColor)
+            .cornerRadius(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(borderColor, lineWidth: isAnswerChecked && (isCorrect || isSelected) ? 2 : 1)
+                    .stroke(borderColor, lineWidth: 2)
             )
-            .shadow(color: shadowColor, radius: isSelected ? 8 : 4, x: 0, y: isSelected ? 4 : 2)
+            .opacity(isHidden ? 0 : 1)
         }
-        .allowsHitTesting(!isAnswerChecked && !isHidden)
-        .opacity(isHidden ? 0.3 : 1.0)
-        .scaleEffect(isHidden ? 0.95 : 1.0)
-        .animation(.spring(), value: isHidden)
+        .disabled(isAnswerChecked || isHidden)
     }
-    
-    // MARK: - Dynamic Colors
     
     private var backgroundColor: Color {
         if isAnswerChecked {
-            if isCorrect {
-                return Color.green.opacity(0.4)
-            } else if isSelected {
-                return Color.red.opacity(0.4)
-            } else {
-                return Color.clear
-            }
-        } else {
-            return isSelected ? Color.blue.opacity(0.3) : Color.clear
+            if isCorrect { return Color.green.opacity(0.2) }
+            if isSelected { return Color.red.opacity(0.2) }
+            return Color.white.opacity(0.05)
         }
+        return isSelected ? accentColor.opacity(0.2) : Color.white.opacity(0.1)
     }
     
     private var borderColor: Color {
         if isAnswerChecked {
-            if isCorrect {
-                return .green
-            } else if isSelected {
-                return .red
-            } else {
-                return Color.primary.opacity(0.1)
-            }
-        } else {
-            return isSelected ? .blue : Color.primary.opacity(0.2)
+            if isCorrect { return .green }
+            if isSelected { return .red }
+            return .clear
         }
+        return isSelected ? accentColor : .clear
     }
     
     private var textColor: Color {
-        if isAnswerChecked && !isCorrect && !isSelected {
-            return Color.primary.opacity(0.7)
-        }
-        return .primary
-    }
-    
-    private var shadowColor: Color {
         if isAnswerChecked {
-            // Remove colored shadows when checked so they don't blur into adjacent glass buttons
-            return Color.clear
-        } else if isSelected {
-            return Color.blue.opacity(0.4)
+            if isCorrect { return .green }
+            if isSelected { return .red }
+            return .primary.opacity(0.6)
         }
-        return Color.clear
+        return isSelected ? .primary : .primary
     }
 }

@@ -2,10 +2,10 @@ import SwiftUI
 
 struct QuizView: View {
     @ObservedObject var viewModel: QuizViewModel
+    @EnvironmentObject var themeManager: ThemeManager
     @Environment(\.dismiss) var dismiss
     
     @State private var flipDegrees: Double = 0.0
-    @State private var isPulsing: Bool = false
     @State private var gradientStart = UnitPoint.topLeading
     @State private var gradientEnd = UnitPoint.bottomTrailing
     
@@ -16,21 +16,28 @@ struct QuizView: View {
             if viewModel.isLoading {
                 loadingView
             } else if viewModel.isQuizComplete {
-                ResultView(viewModel: viewModel, onRestart: { dismiss() })
+                ResultView(viewModel: viewModel, onRestart: { 
+                    SoundManager.shared.stopBackgroundMusic()
+                    dismiss() 
+                })
             } else if let _ = viewModel.currentQuestion {
                 mainGameplayContent
-            }
-            
-            if viewModel.streak >= 3 {
-                FloatingStreakBadge(streak: viewModel.streak)
             }
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: { dismiss() }) {
+                Button(action: { 
+                    SoundManager.shared.stopBackgroundMusic()
+                    dismiss() 
+                }) {
                     Image(systemName: "xmark.circle.fill").foregroundColor(.white).font(.title2)
                 }
+            }
+        }
+        .onChange(of: viewModel.timeRemaining) { newValue in
+            if newValue == 5 {
+                SoundManager.shared.setIntensity("intense")
             }
         }
     }
@@ -39,7 +46,7 @@ struct QuizView: View {
     
     private var backgroundGradient: some View {
         LinearGradient(
-            colors: [Color.blue.opacity(0.8), Color.purple.opacity(0.8), Color.indigo.opacity(0.8)],
+            colors: themeManager.currentTheme.gradientColors,
             startPoint: gradientStart,
             endPoint: gradientEnd
         )
@@ -55,7 +62,8 @@ struct QuizView: View {
     private var loadingView: some View {
         VStack(spacing: 20) {
             ProgressView().scaleEffect(1.5).tint(.white)
-            Text("Fetching Questions...").font(.headline).foregroundColor(.white)
+            Text("Fetching \(viewModel.selectedDifficulty) Questions...")
+                .font(.headline).foregroundColor(.white)
         }
     }
     
@@ -82,7 +90,7 @@ struct QuizView: View {
         HStack {
             VStack(alignment: .leading, spacing: 8) {
                 Text(viewModel.progressText).font(.subheadline).foregroundColor(.white.opacity(0.8))
-                ProgressBar(progress: viewModel.progressFraction)
+                ProgressBar(progress: viewModel.progressFraction, color: themeManager.currentTheme.accent)
                 if viewModel.streak >= 3 {
                     Text("🔥 Streak: \(viewModel.streak)").font(.caption).fontWeight(.bold).foregroundColor(.orange)
                 }
@@ -117,14 +125,18 @@ struct QuizView: View {
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
                 
-                VStack(spacing: 12) {
+                // Adjust layout for True/False (2 buttons) vs Multiple Choice (4 buttons)
+                let columns = question.options.count == 2 ? [GridItem(.flexible()), GridItem(.flexible())] : [GridItem(.flexible())]
+                
+                LazyVGrid(columns: columns, spacing: 12) {
                     ForEach(0..<question.options.count, id: \.self) { index in
                         OptionButton(
                             text: question.options[index],
                             isSelected: viewModel.selectedOptionIndex == index,
                             isCorrect: question.correctAnswerIndex == index,
                             isAnswerChecked: viewModel.isAnswerChecked,
-                            isHidden: viewModel.hiddenOptionIndices.contains(index)
+                            isHidden: viewModel.hiddenOptionIndices.contains(index),
+                            accentColor: themeManager.currentTheme.accent
                         ) {
                             withAnimation(.spring(response: 0.5, dampingFraction: 0.6)) {
                                 viewModel.selectOption(index: index)
@@ -146,11 +158,14 @@ struct QuizView: View {
     private var nextButton: some View {
         Button(action: {
             HapticManager.shared.impact(style: .light)
-            withAnimation { viewModel.nextQuestion() }
+            withAnimation { 
+                viewModel.nextQuestion() 
+                SoundManager.shared.setIntensity("normal") // Reset intensity for next question
+            }
         }) {
             Text(viewModel.currentQuestionIndex == viewModel.questions.count - 1 ? "Finish Quiz" : "Next Question")
                 .font(.headline)
-                .foregroundColor(.blue)
+                .foregroundColor(themeManager.currentTheme.accent)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.white)
@@ -159,33 +174,6 @@ struct QuizView: View {
         }
         .padding(.horizontal)
         .padding(.bottom, 30)
-        .transition(.move(edge: .bottom).combined(with: .opacity))
-    }
-}
-
-struct FloatingStreakBadge: View {
-    let streak: Int
-    @State private var isPulsing = false
-    
-    var body: some View {
-        VStack {
-            Spacer()
-            HStack {
-                Spacer()
-                VStack(spacing: -10) {
-                    Text("🔥").font(.system(size: 80))
-                    Text("\(streak)").font(.system(size: 40, weight: .black, design: .rounded)).foregroundColor(.white).shadow(radius: 5)
-                    Text("STREAK").font(.system(size: 14, weight: .bold)).foregroundColor(.white.opacity(0.9))
-                }
-                .padding(20).background(.ultraThinMaterial).clipShape(Circle())
-                .overlay(Circle().stroke(Color.orange.opacity(0.6), lineWidth: 4))
-                .shadow(color: .orange.opacity(0.5), radius: 20)
-                .scaleEffect(isPulsing ? 1.1 : 1.0)
-                .onAppear { withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) { isPulsing = true } }
-                .padding(.trailing, 30).padding(.bottom, 100)
-            }
-        }
-        .ignoresSafeArea().allowsHitTesting(false)
     }
 }
 

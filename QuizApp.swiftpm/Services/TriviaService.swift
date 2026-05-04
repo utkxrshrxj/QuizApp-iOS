@@ -3,10 +3,23 @@ import Foundation
 class TriviaService {
     static let shared = TriviaService()
     
-    func fetchQuestions(categoryId: Int?, amount: Int = 10) async throws -> [Question] {
-        var urlString = "https://opentdb.com/api.php?amount=\(amount)&type=multiple"
+    func fetchQuestions(categoryId: Int?, difficulty: String? = nil, type: String? = nil, amount: Int = 10) async throws -> [Question] {
+        var urlString = "https://opentdb.com/api.php?amount=\(amount)"
+        
         if let categoryId = categoryId {
             urlString += "&category=\(categoryId)"
+        }
+        
+        if let difficulty = difficulty {
+            urlString += "&difficulty=\(difficulty.lowercased())"
+        }
+        
+        if let type = type {
+            urlString += "&type=\(type)"
+        } else {
+            // Default to mixed multiple and boolean if not specified
+            // Note: API doesn't have a 'mixed' parameter for type, 
+            // so we omit it to get both unless explicitly requested.
         }
         
         guard let url = URL(string: urlString) else {

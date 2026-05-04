@@ -20,6 +20,8 @@ class QuizViewModel: ObservableObject {
     @Published var timeRemaining: Int = 10
     @Published var isQuizComplete: Bool = false
     @Published var isDailyChallenge: Bool = false
+    @Published var selectedDifficulty: String = "Medium"
+    @Published var questionType: String? = nil // nil = Mixed
     
     // Review Logic
     struct AttemptedQuestion: Identifiable {
@@ -75,7 +77,11 @@ class QuizViewModel: ObservableObject {
         Task {
             isLoading = true
             do {
-                let fetchedQuestions = try await TriviaService.shared.fetchQuestions(categoryId: category.apiId)
+                let fetchedQuestions = try await TriviaService.shared.fetchQuestions(
+                    categoryId: category.apiId,
+                    difficulty: selectedDifficulty,
+                    type: questionType
+                )
                 self.questions = fetchedQuestions
                 self.isLoading = false
                 self.resetQuestionState()
