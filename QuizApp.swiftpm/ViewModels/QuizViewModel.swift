@@ -12,6 +12,7 @@ class QuizViewModel: ObservableObject {
     @Published var currentQuestionIndex: Int = 0
     @Published var score: Int = 0
     @Published var streak: Int = 0
+    @Published var highestStreak: Int = 0
     
     @Published var selectedOptionIndex: Int? = nil
     @Published var isAnswerChecked: Bool = false
@@ -52,6 +53,7 @@ class QuizViewModel: ObservableObject {
         self.currentQuestionIndex = 0
         self.score = 0
         self.streak = 0
+        self.highestStreak = 0
         self.isQuizComplete = false
         self.questions = []
         self.used5050 = false
@@ -133,6 +135,11 @@ class QuizViewModel: ObservableObject {
             score += 2
             streak += 1
             
+            // Update highest streak
+            if streak > highestStreak {
+                highestStreak = streak
+            }
+            
             // Streak gamification bonus (e.g., +1 extra point per 3 streaks)
             if streak >= 3 && streak % 3 == 0 {
                 score += 1
@@ -178,7 +185,7 @@ class QuizViewModel: ObservableObject {
                     // Time is up
                     self.stopTimer()
                     self.isAnswerChecked = true
-                    self.score -= 1 // Penalty for timing out
+                    // Award 0 points for timing out, but break the streak
                     self.streak = 0
                     HapticManager.shared.notification(type: .error)
                     SoundManager.shared.playIncorrectSound()
