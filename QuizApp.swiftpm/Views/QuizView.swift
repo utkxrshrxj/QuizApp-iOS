@@ -6,6 +6,7 @@ struct QuizView: View {
     
     // Animation state for the 3D flip
     @State private var flipDegrees: Double = 0.0
+    @State private var isPulsing: Bool = false
     
     // Gradient animation
     @State private var gradientStart = UnitPoint.topLeading
@@ -151,7 +152,48 @@ struct QuizView: View {
                         .padding(.bottom, 30)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
+                    
                 }
+            }
+            
+            // Floating Streak Overlay
+            if viewModel.streak >= 3 {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        VStack(spacing: -10) {
+                            Text("🔥")
+                                .font(.system(size: 80))
+                            Text("\(viewModel.streak)")
+                                .font(.system(size: 40, weight: .black, design: .rounded))
+                                .foregroundColor(.white)
+                                .shadow(radius: 5)
+                            Text("STREAK")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(.white.opacity(0.9))
+                        }
+                        .padding(20)
+                        .background(.ultraThinMaterial)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.orange.opacity(0.6), lineWidth: 4))
+                        .shadow(color: .orange.opacity(0.5), radius: 20)
+                        .scaleEffect(isPulsing ? 1.1 : 1.0)
+                        .onAppear {
+                            withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                                isPulsing = true
+                            }
+                        }
+                        .padding(.trailing, 30)
+                        .padding(.bottom, 100)
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .trailing).combined(with: .opacity).combined(with: .scale),
+                            removal: .scale.combined(with: .opacity)
+                        ))
+                    }
+                }
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
             }
         }
         .navigationBarBackButtonHidden(true)
